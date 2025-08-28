@@ -129,5 +129,13 @@ if D_penstock:
 else:
     st.error("Invalid velocity selected.")
 
+def suggest_turbine(H):
+    """Suggest turbine type based on net head (m)."""
+    if H > 300:
+        return "Pelton Turbine (High Head)"
+    elif 50 <= H <= 300:
+        return "Francis Turbine (Medium Head)"
+    else:
+        return "Kaplan / Propeller Turbine (Low Head)"
 
 
