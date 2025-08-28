@@ -8,7 +8,6 @@ def convert_discharge(value, unit):
         return value * 0.0283168
     elif unit == "m³/s":
         return value
-    
     else:
         return value
 
@@ -18,7 +17,6 @@ def convert_velocity(value, unit):
         return value * 0.3048
     elif unit == "m/s":
         return value
-    
     else:
         return value
 
@@ -28,7 +26,6 @@ def convert_head(value, unit):
         return value
     elif unit == "feet":
         return value * 0.3048
-    
     else:
         return value
 
@@ -61,7 +58,6 @@ def power_imperial(Q_cusec, H_ft, eta_turbine, eta_generator):
     return (W * Q_cusec * H_ft * eta_turbine * eta_generator * 746) / (550 * 1000)
 
 
-
 # ---------------- Streamlit UI ---------------- #
 st.set_page_config(page_title="Mini Hydraulic Power Plant", page_icon="💡", layout="centered")
 
@@ -80,9 +76,7 @@ with st.sidebar:
 
     # Head input
     H_value = st.number_input("Net Head Value", value=20.0, min_value=0.0, step=0.1)
-    H_unit = st.selectbox("Head Unit", ["meters", "feet", ])
-
-    
+    H_unit = st.selectbox("Head Unit", ["meters", "feet"])
 
     st.markdown("---")
     eta_turbine = st.slider("Turbine Efficiency ηₜ (%)", min_value=1, max_value=100, value=85, step=1) / 100
@@ -103,9 +97,8 @@ P_hydraulic_W = hydraulic_power(rho, g, Q_m3s, H_m)
 P_actual_W = actual_power(P_hydraulic_W, eta_turbine, eta_generator)
 P_imperial_kW = power_imperial(Q_cusec, H_ft, eta_turbine, eta_generator)
 
-# Compute penstock diameter & thickness
+# Compute penstock diameter
 D_penstock = penstock_diameter(Q_m3s, v_mps)
-
 
 # ---------------- Results ---------------- #
 st.subheader("Results")
@@ -129,13 +122,9 @@ if D_penstock:
 else:
     st.error("Invalid velocity selected.")
 
-def suggest_turbine(H):
-    """Suggest turbine type based on net head (m)."""
-    if H > 300:
-        return "Pelton Turbine (High Head)"
-    elif 50 <= H <= 300:
-        return "Francis Turbine (Medium Head)"
-    else:
-        return "Kaplan / Propeller Turbine (Low Head)"
+# Turbine Suggestion
+st.markdown("### ⚙ Suggested Turbine Type")
+turbine = suggest_turbine(H_m)
+st.info(f"Recommended Turbine: **{turbine}**")
 
 
