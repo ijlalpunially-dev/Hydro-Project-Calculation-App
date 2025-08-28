@@ -8,8 +8,7 @@ def convert_discharge(value, unit):
         return value * 0.0283168
     elif unit == "m³/s":
         return value
-    else:
-        return value
+    return value
 
 def convert_velocity(value, unit):
     """Convert velocity to m/s."""
@@ -17,8 +16,7 @@ def convert_velocity(value, unit):
         return value * 0.3048
     elif unit == "m/s":
         return value
-    else:
-        return value
+    return value
 
 def convert_head(value, unit):
     """Convert head to meters."""
@@ -26,8 +24,7 @@ def convert_head(value, unit):
         return value
     elif unit == "feet":
         return value * 0.3048
-    else:
-        return value
+    return value
 
 def hydraulic_power(rho, g, Q_m3s, H_m):
     """Theoretical hydraulic power (W)."""
@@ -67,22 +64,22 @@ st.caption("Calculate power, penstock size, and turbine type for your micro hydr
 with st.sidebar:
     st.header("📥 User Inputs")
 
-    # Discharge input
-    Q_value = st.number_input("Discharge Value", value=50.0, min_value=0.0, step=0.1)
+    # Discharge input (3 decimal places)
+    Q_value = st.number_input("Discharge Value", value=50.000, min_value=0.000, format="%.3f")
     Q_unit = st.selectbox("Discharge Unit", ["cusec (ft³/s)", "m³/s"])
 
-    # Velocity input
-    v_value = st.number_input("Velocity Value", value=3.0, min_value=0.0, step=0.1)
+    # Velocity input (3 decimal places)
+    v_value = st.number_input("Velocity Value", value=3.000, min_value=0.000, format="%.3f")
     v_unit = st.selectbox("Velocity Unit", ["ft/s", "m/s"])
 
-    # Head input
-    H_value = st.number_input("Net Head Value", value=25.0, min_value=0.0, step=0.1)
+    # Head input (3 decimal places)
+    H_value = st.number_input("Net Head Value", value=25.000, min_value=0.000, format="%.3f")
     H_unit = st.selectbox("Head Unit", ["meters", "feet"])
 
     st.markdown("---")
     st.subheader("⚙ Efficiencies")
-    eta_turbine = st.slider("Turbine Efficiency ηₜ (%)", min_value=50, max_value=100, value=85, step=1) / 100
-    eta_generator = st.slider("Generator Efficiency ηg (%)", min_value=50, max_value=100, value=90, step=1) / 100
+    eta_turbine = st.number_input("Turbine Efficiency ηₜ (%)", value=85.000, min_value=1.000, max_value=100.000, format="%.3f") / 100
+    eta_generator = st.number_input("Generator Efficiency ηg (%)", value=90.000, min_value=1.000, max_value=100.000, format="%.3f") / 100
 
 
 # ---------------- Conversions ---------------- #
@@ -108,19 +105,19 @@ st.subheader("📊 Results")
 
 col1, col2 = st.columns(2)
 with col1:
-    st.metric("Hydraulic Power (theoretical)", f"{P_hydraulic_W/1000:.2f} kW")
+    st.metric("Hydraulic Power (theoretical)", f"{P_hydraulic_W/1000:.3f} kW")
     st.caption("P = ρ g Q H")
 
 with col2:
-    st.metric("Electrical Output Power", f"{P_actual_W/1000:.2f} kW")
+    st.metric("Electrical Output Power", f"{P_actual_W/1000:.3f} kW")
     st.caption("P_out = P × ηₜ × ηg")
 
 st.markdown("### ⚖ Power (Imperial Formula)")
-st.success(f"{P_imperial_kW:.2f} kW (using W·Q·H method)")
+st.success(f"{P_imperial_kW:.3f} kW (using W·Q·H method)")
 
 st.markdown("### 🚰 Penstock Pipe Diameter")
 if D_penstock:
-    st.success(f"Recommended Diameter ≈ {D_penstock:.3f} m (for velocity {v_mps:.2f} m/s)")
+    st.success(f"Recommended Diameter ≈ {D_penstock:.3f} m (for velocity {v_mps:.3f} m/s)")
 else:
     st.error("Invalid velocity selected.")
 
