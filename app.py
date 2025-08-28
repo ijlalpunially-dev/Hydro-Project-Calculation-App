@@ -98,7 +98,8 @@ P_actual_W = actual_power(P_hydraulic_W, eta_turbine, eta_generator)
 P_imperial_kW = power_imperial(Q_cusec, H_ft, eta_turbine, eta_generator)
 
 # Penstock Diameter
-D_penstock = penstock_diameter(Q_m3s, v_mps)
+D_penstock_m = penstock_diameter(Q_m3s, v_mps)
+D_penstock_in = D_penstock_m * 39.3701 if D_penstock_m else None
 
 # ---------------- Results ---------------- #
 st.subheader("📊 Results")
@@ -116,8 +117,8 @@ st.markdown("### ⚖ Power (Imperial Formula)")
 st.success(f"{P_imperial_kW:.3f} kW (using W·Q·H method)")
 
 st.markdown("### 🚰 Penstock Pipe Diameter")
-if D_penstock:
-    st.success(f"Recommended Diameter ≈ {D_penstock:.3f} m (for velocity {v_mps:.3f} m/s)")
+if D_penstock_m:
+    st.success(f"Recommended Diameter ≈ {D_penstock_m:.3f} m  |  {D_penstock_in:.2f} inches (for velocity {v_mps:.3f} m/s)")
 else:
     st.error("Invalid velocity selected.")
 
