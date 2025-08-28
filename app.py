@@ -126,5 +126,3 @@ else:
 st.markdown("### ⚙ Suggested Turbine Type")
 turbine = suggest_turbine(H_m)
 st.info(f"Recommended Turbine: **{turbine}**")
-
-
